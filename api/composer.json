@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"cartalyst/sentry": "2.1.*",
 		"nesbot/Carbon": "*",
-		"hisorange/browser-detect": "1.*"
+		"hisorange/browser-detect": "1.*",
+		"barryvdh/laravel-cors": "0.2.3"
 	},
 	"autoload": {
 		"classmap": [

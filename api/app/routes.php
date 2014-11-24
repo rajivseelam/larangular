@@ -13,8 +13,16 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return Response::json('Welcome to the API!');
 });
+
+Route::group(array('before'=>'auth.token'), function() {  
+
+    Route::resource('urls','UrlController');
+
+});
+
+
 
 Route::get('account',[
 

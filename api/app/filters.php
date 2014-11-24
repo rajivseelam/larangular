@@ -144,12 +144,7 @@ Route::filter('auth.token', function($route, $request)
 
 	if(!$authenticated)
 	{
-		$response = Response::json([
-	            'error' => true,
-	            'message' => 'Not authenticated',
-	            'code' => 401],
-	            401
-	        );
+		$response = Response::json(['message' => 'Not authenticated'],401);
 
 		$response->header('Content-Type', 'application/json');
 

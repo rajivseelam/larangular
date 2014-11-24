@@ -124,6 +124,7 @@ return array(
 
 		'Cartalyst\Sentry\SentryServiceProvider',
 		'hisorange\BrowserDetect\Provider\BrowserDetectService',
+		'Barryvdh\Cors\CorsServiceProvider',
 
 	),
 
