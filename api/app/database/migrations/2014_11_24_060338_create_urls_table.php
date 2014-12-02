@@ -18,7 +18,7 @@ class CreateUrlsTable extends Migration {
 
 			$table->string('title');
 			
-			$table->string('url')->unique();
+			$table->string('link')->unique();
 
 			$table->integer('user_id')->unsigned();
 

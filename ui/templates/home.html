@@ -1,0 +1,36 @@
+<div class="row">
+	<div class="col-md-12">
+		<h1>Welcome to Larangular</h1>
+		<h6>This is where you will find resources for Laravel + Angular</h6>
+		<h4>Learn and Grow</h4>
+
+		<div ng-if="urls.length">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Links</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in urls">
+						<td>
+							<a href="{{ item.url.link }}">{{ item.url.title }}</a>
+							{{ item.favorite }}	
+						</td>
+
+						<td>
+							<button class="btn btn-primary btn-xs" ng-hide="item.favorite">
+								Add to Favorites
+							</button>
+							<button class="btn btn-danger btn-xs" ng-show="item.favorite">
+								Remove From Favorites
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>

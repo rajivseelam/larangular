@@ -32,11 +32,11 @@ class UrlController extends \BaseController {
 	public function store()
 	{
 		$rules = [
-			'url' => 'required|url|unique:urls',
+			'link' => 'required|url|unique:urls',
 			'title' => 'required'
 		];
 
-		$input = Input::only('url','title');
+		$input = Input::only('link','title');
 
 		$validator = Validator::make($input,$rules);
 

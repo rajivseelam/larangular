@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="urlApp">
+
+<head>
+<meta charset="UTF-8">
+<title>Larangular</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="alert alert-info" role="alert" ng-show="flash">
+			 	{{ flash }}
+			</div>
+		</div>
+	</div>
+
+	<div id="view" ng-view></div>
+
+</div>
+
+<script type="text/javascript">
+	var apiBase = "http://api.ldev.com/";
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular-route.min.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/angular-base64.min.js"></script>
+<script src="js/angular-local-storage.min.js"></script>
+
+<script type="text/javascript">
+
+	var urlApp = angular.module('urlApp', ['ngRoute','angularBasicAuth']);
+
+	urlApp.factory("FlashService", function($rootScope) {
+	  return {
+	    show: function(message) {
+	      $rootScope.flash = message;
+	    },
+	    clear: function() {
+	      $rootScope.flash = "";
+	    }
+	  }
+	});
+
+	urlApp.factory("SessionService", function() {
+	  return {
+	    get: function(key) {
+	      return sessionStorage.getItem(key);
+	    },
+	    set: function(key, val) {
+	      return sessionStorage.setItem(key, val);
+	    },
+	    unset: function(key) {
+	      return sessionStorage.removeItem(key);
+	    }
+	  }
+	});
+
+	urlApp.config(function($httpProvider) {
+
+		var logsOutUserOn401 = function($location, $q, SessionService, FlashService) {
+			var success = function(response) {
+			  return response;
+			};
+
+			var error = function(response) {
+			  if(response.status === 401) {
+			    SessionService.unset('authenticated');
+			    $location.path('/login');
+			    FlashService.show(response.data.flash);
+			  }
+			  return $q.reject(response);
+			};
+
+			return function(promise) {
+			  return promise.then(success, error);
+			};
+		};
+
+		$httpProvider.responseInterceptors.push(logsOutUserOn401);
+
+	});
+
+	urlApp.config(function($routeProvider) {
+
+	  $routeProvider.when('/', {
+	    templateUrl: 'templates/home.html',
+	    controller: 'HomeController'
+	  });
+
+	  $routeProvider.when('/login', {
+	    templateUrl: 'templates/login.html',
+	    controller: 'LoginController'
+	  });
+
+  	  $routeProvider.when('/profile', {
+	    templateUrl: 'templates/profile.html',
+	    controller: 'LoginController'
+	  });
+
+	  $routeProvider.otherwise({ redirectTo: '/' });
+
+	});
+
+	urlApp.controller('HomeController', function($scope,$http){
+
+		$scope.urls = [];
+
+		$http.get(apiBase).
+				success(function(data, status, headers, config) {
+					$scope.urls = data;
+				}).
+				error(function(data, status, headers, config) {
+					console.log(data);
+				});;
+
+	});
+
+	urlApp.controller('LoginController', function($scope,authService){
+
+
+		$scope.credentials = { email: "", password: "" };
+
+		$scope.login = function() {
+
+			authService.login($scope.credentials.email,$scope.credentials.password);
+
+		}
+
+	});
+
+</script>
+
+</body>
+</html>

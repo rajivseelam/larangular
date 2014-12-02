@@ -13,7 +13,24 @@
 
 Route::get('/', function()
 {
-	return Response::json('Welcome to the API!');
+	$faker = Faker\Factory::create();
+
+	$urls = [];
+
+	for($i = 0; $i < 10; $i++)
+	{
+		$item['id'] = $faker->unique(true)->randomDigitNotNull;
+		$item['link'] = $faker->url;
+		$item['title'] = $faker->sentence(16);
+
+		$url['url'] = $item;
+
+		$url['favorite'] = $faker->boolean($faker->optional(0.3, true)->randomDigit);
+
+		$urls[] = $url;
+	}
+
+	return Response::json($urls,200);
 });
 
 Route::group(array('before'=>'auth.token'), function() {  
